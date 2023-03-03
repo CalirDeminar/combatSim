@@ -1,4 +1,4 @@
-pub mod weapons {
+
     #[derive(Debug)]
     pub struct Weapon {
         pub pen: i32,
@@ -21,4 +21,3 @@ pub mod weapons {
             rof: 1,
         };
     }
-}

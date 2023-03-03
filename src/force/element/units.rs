@@ -1,5 +1,5 @@
-mod weapons;
-use weapons::weapons::{Weapon, sword, spear};
+pub mod weapons;
+use weapons::{Weapon, sword, spear};
 
 #[derive(Debug)]
 pub struct Unit {
