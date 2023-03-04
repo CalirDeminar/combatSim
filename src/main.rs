@@ -12,6 +12,13 @@ fn hit_check(_weapon: &Weapon, _target: &Unit) -> bool {
     return i < 0.5;
 }
 
+fn pen_check(weapon: &Weapon, target: &Unit) -> bool {
+    let mut rng = rand::thread_rng();
+    let i: f32 = rng.gen();
+    let pen_chance = weapon.pen as f32/(target.armour * 2) as f32;
+    return i < pen_chance.clamp(0.0, 1.0);
+}
+
 fn random_target(force: &Force) -> &Unit {
     let elements = &force.forces;
     let total_forces = elements.into_iter().fold(0, |acc, e| acc + e.count);
@@ -32,16 +39,30 @@ fn run_round(force_a: Force, force_b: Force) {
     println!("{:?}", force_b);
     // FA
     for element in force_a.forces {
-        let mut element_hits = 0;
+        let mut hits: Vec<(&Unit, i32)> = vec![];
+        let mut pens: Vec<(&Unit, i32)> = vec![];
+        // let mut kills: Vec<(&Unit, i32)> = vec![];
         for _i in 1..element.count {
-            for weapon in element.unit_type.weapons {
+            for weapon in &element.unit_type.weapons {
                 let target_type = random_target(&force_b);
                 if hit_check(&weapon, &target_type) {
-                    element_hits += 1;
+                    let target_record = hits.iter().position(|x| std::ptr::eq(x.0, target_type)  );
+                    match target_record {
+                        Some(p) => hits[p] = (hits[p].0, hits[p].1 + 1),
+                        None => hits.push((target_type, 1)),
+                    }
+                    if pen_check(&weapon, &target_type){
+                        let target_record = pens.iter().position(|x| std::ptr::eq(x.0, target_type)  );
+                        match target_record {
+                            Some(p) => pens[p] = (pens[p].0, pens[p].1 + 1),
+                            None => pens.push((target_type, 1)),
+                        }
+                    }
                 }
             }
         }
-        println!("Force A Hits: '{}'", element_hits);
+        println!("Force A Hits: '{:?}'", hits);
+        println!("Force A Pens: '{:?}'", pens);
     }
     // FB
 }

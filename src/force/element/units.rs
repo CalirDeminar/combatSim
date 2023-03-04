@@ -3,6 +3,7 @@ use weapons::{Weapon, sword, spear};
 
 #[derive(Debug)]
 pub struct Unit {
+    name: String,
     pub hp: i32,
     pub armour: i32,
     pub size: i32,
@@ -11,6 +12,7 @@ pub struct Unit {
 
 pub fn swordsman() -> Unit {
     return Unit {
+        name: String::from("Swordsman"),
         hp: 1,
         armour: 1,
         size: 1,
@@ -20,6 +22,7 @@ pub fn swordsman() -> Unit {
 
 pub fn spearman() -> Unit {
     return Unit {
+        name: String::from("Spearman"),
         hp: 1,
         armour: 1,
         size: 1,
