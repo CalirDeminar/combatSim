@@ -1,9 +1,9 @@
 pub mod weapons;
 use weapons::{Weapon, sword, spear};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Unit {
-    name: String,
+    pub name: String,
     pub hp: i32,
     pub armour: i32,
     pub size: i32,
