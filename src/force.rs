@@ -44,8 +44,8 @@ pub mod force_combat {
 
     fn random_target(force: &mut Force) -> Option<&mut Element>  {
         let elements = &mut force.forces;
-        let total_forces = elements.into_iter().fold(0, |acc, e| acc + e.count);
-        let odds = elements.into_iter().map(|e| (e.count as f32 / total_forces as f32, e));
+        let total_forces = elements.into_iter().fold(0, |acc, e| acc + (e.count * e.unit_type.size));
+        let odds = elements.into_iter().map(|e| ((e.count * e.unit_type.size) as f32 / total_forces as f32, e));
         let mut i: f32 = rand::thread_rng().gen();
         for entry in odds {
             if i < entry.0 {
@@ -62,33 +62,35 @@ pub mod force_combat {
         for element in attacker.forces {
             for _i in 1..(element.count + 1) {
                 for weapon in &element.unit_type.weapons {
-                    let target_option = random_target(&mut working_target);
-                    if target_option.is_some() {
-                        let target_element = target_option.unwrap();
-                        let hit = hit_check(weapon, &target_element.unit_type);
-                        let penned = hit && pen_check(weapon, &target_element.unit_type);
-                        let killed = penned && kill_check(weapon, &target_element.unit_type);
-                        let mut verb = String::from("missed");
-                        if hit {
-                            verb = String::from("hit");
-                        }
-                        if penned {
-                            verb = String::from("penned");
-                        }
-                        if killed {
-                            verb = String::from("killed");
-                            target_element.count -= 1;
-                        }
-                        combat_log.push(
-                            CombatLog {
-                                attacker_force_name: attacker.name.clone(),
-                                attacker_unit_name: element.unit_type.name.clone(),
-                                weapon_name: weapon.name.clone(),
-                                target_force_name: target.name.clone(),
-                                target_unit_name: target_element.unit_type.name.clone(),
-                                verb: verb,
+                    for _j in 1..(weapon.rof + 1) {
+                        let target_option = random_target(&mut working_target);
+                        if target_option.is_some() {
+                            let target_element = target_option.unwrap();
+                            let hit = hit_check(weapon, &target_element.unit_type);
+                            let penned = hit && pen_check(weapon, &target_element.unit_type);
+                            let killed = penned && kill_check(weapon, &target_element.unit_type);
+                            let mut verb = String::from("missed");
+                            if hit {
+                                verb = String::from("hit");
                             }
-                        );
+                            if penned {
+                                verb = String::from("penned");
+                            }
+                            if killed {
+                                verb = String::from("killed");
+                                target_element.count -= 1;
+                            }
+                            combat_log.push(
+                                CombatLog {
+                                    attacker_force_name: attacker.name.clone(),
+                                    attacker_unit_name: element.unit_type.name.clone(),
+                                    weapon_name: weapon.name.clone(),
+                                    target_force_name: target.name.clone(),
+                                    target_unit_name: target_element.unit_type.name.clone(),
+                                    verb: verb,
+                                }
+                            );
+                        }
                     }
                 }
             }
@@ -114,7 +116,6 @@ pub mod force_combat {
             print_combatants(&f_a);
             print_combatants(&f_b);
             let res = run_round(f_a.clone(), f_b.clone());
-            // println!("Log: {:#?}", (res.0.clone(), res.1.clone()));
             f_a = res.0;
             f_b = res.1;
             f_a.forces.retain(|e| e.count > 0);
