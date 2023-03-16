@@ -1,5 +1,5 @@
 mod force;
-use force::{element::{units, Element}, Force, CombatLog, force_combat::*};
+use force::{element::{units, Element}, Force, force_combat::*};
 use units::{swordsman, spearman};
 
 fn main() {
