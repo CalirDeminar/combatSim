@@ -6,6 +6,7 @@ use element::Element;
 pub struct Force {
     pub name: String,
     pub forces: Vec<Element>,
+    pub supply_used: i32,
 }
 
 
@@ -19,6 +20,24 @@ pub mod force_combat {
 
     pub fn element_builder(unit_type: Unit, count: i32, fort: i32) -> Element {
         return Element {unit_type: unit_type, count: count, fortification: fort};
+    }
+
+    fn calc_supply_usage(f: &Force) -> i32 {
+        let mut total = 0;
+        for element in f.forces.clone() {
+            for weapon in element.unit_type.weapons {
+                total += weapon.supply_usage;
+            }
+        }
+        return total;
+    }
+
+    fn calc_supply_capacity(f: &Force) -> i32 {
+        let mut total = 0;
+        for element in f.forces.clone() {
+            total += (element.unit_type.supply_storage * element.count);
+        }
+        return total;
     }
 
     pub fn run_round(force_a: Force, force_b: Force) -> (Force, Force, Vec<CombatLog>) {
@@ -53,6 +72,8 @@ pub mod force_combat {
                 println!("{:?} is victorious", force_a.name);
                 break;
             }
+            f_a.supply_used += calc_supply_usage(&f_a);
+            f_b.supply_used += calc_supply_usage(&f_b);
             round_count += 1;
         }
     }

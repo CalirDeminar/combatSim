@@ -60,5 +60,7 @@ pub fn print_combatants(force: &Force){
     for element in force.forces.clone() {
         println!("{}x {}", element.count, element.unit_type.name)
     }
+    let supply_capacity = calc_supply_capacity(force);
+    println!("{}/{} Supply", supply_capacity - force.supply_used, supply_capacity);
     println!("");
 }

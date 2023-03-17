@@ -8,6 +8,7 @@ pub struct Unit {
     pub armour: i32,
     pub size: i32,
     pub weapons: Vec<Weapon>,
+    pub supply_storage: i32,
 }
 
 pub fn swordsman() -> Unit {
@@ -16,7 +17,8 @@ pub fn swordsman() -> Unit {
         hp: 2,
         armour: 1,
         size: 2,
-        weapons: vec![sword()]
+        weapons: vec![sword()],
+        supply_storage: 48
     }
 }
 
@@ -26,7 +28,8 @@ pub fn spearman() -> Unit {
         hp: 2,
         armour: 1,
         size: 2,
-        weapons: vec![spear()]
+        weapons: vec![spear()],
+        supply_storage: 48
     }
 }
 
@@ -36,7 +39,8 @@ pub fn goblin() -> Unit {
         hp: 1,
         armour: 1,
         size: 1,
-        weapons: vec![dagger(), dagger()]
+        weapons: vec![dagger(), dagger()],
+        supply_storage: 48
     }
 }
 
@@ -46,7 +50,8 @@ pub fn knight() -> Unit {
         hp: 2,
         armour: 3,
         size: 3,
-        weapons: vec![sword()]
+        weapons: vec![sword()],
+        supply_storage: 48
     }
 }
 
@@ -56,7 +61,8 @@ pub fn cavalry() -> Unit {
         hp: 4,
         armour: 2,
         size: 4,
-        weapons: vec![horse_impact(), cavalry_lance()]
+        weapons: vec![horse_impact(), cavalry_lance()],
+        supply_storage: 48
     }
 }
 
@@ -66,7 +72,8 @@ pub fn shortbowman() -> Unit {
         hp: 2,
         armour: 1,
         size: 2,
-        weapons: vec![short_bow()]
+        weapons: vec![short_bow()],
+        supply_storage: 48
     }
 }
 
@@ -76,7 +83,8 @@ pub fn longbowman() -> Unit {
         hp: 2,
         armour: 1,
         size: 2,
-        weapons: vec![long_bow()]
+        weapons: vec![long_bow()],
+        supply_storage: 48
     }
 }
 
@@ -88,7 +96,8 @@ pub fn rifleman() -> Unit {
         hp: 2,
         armour: 5,
         size: 2,
-        weapons: vec![rifle()]
+        weapons: vec![rifle()],
+        supply_storage: 96
     }
 }
 
@@ -98,7 +107,8 @@ pub fn auto_rifleman() -> Unit {
         hp: 2,
         armour: 5,
         size: 2,
-        weapons: vec![automatic_rifle()]
+        weapons: vec![automatic_rifle()],
+        supply_storage: 120
     }
 }
 
@@ -108,7 +118,8 @@ pub fn machine_gunner() -> Unit {
         hp: 2,
         armour: 5,
         size: 2,
-        weapons: vec![machine_gun()]
+        weapons: vec![machine_gun()],
+        supply_storage: 120
     }
 }
 
@@ -118,7 +129,8 @@ pub fn light_at_infantry() -> Unit {
         hp: 2,
         armour: 5,
         size: 2,
-        weapons: vec![light_atgm()]
+        weapons: vec![light_atgm()],
+        supply_storage: 120
     }
 }
 
@@ -128,6 +140,7 @@ pub fn infantry_fighting_vehicle() -> Unit {
         hp: 20,
         armour: 30,
         size: 8,
-        weapons: vec![heavy_machine_gun()]
+        weapons: vec![heavy_machine_gun()],
+        supply_storage: 240
     }
 }

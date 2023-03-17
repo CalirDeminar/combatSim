@@ -1,4 +1,5 @@
 pub mod simulation {
+    use crate::force::force_combat::calc_supply_capacity;
     use crate::units;
     use crate::force;
     use crate::force::force_combat::CombatLog;
@@ -13,7 +14,10 @@ pub mod simulation {
     pub const PENNED: &str = "penned";
     pub const KILLED: &str = "killed";
 
-    pub fn hit_check(weapon: &Weapon, target: &Element) -> bool {
+    pub const BASE_HIT_RATE: f32 = 0.2;
+    pub const OUT_OF_SUPPLY_ENGAGEMENT_CHANCE: f32 = 0.5;
+
+    pub fn hit_check(weapon: &Weapon, target: &Element, has_supply: bool) -> bool {
         let mut rng = rand::thread_rng();
         let i: f32 = rng.gen();
         let foritification_modifier = 
@@ -23,12 +27,15 @@ pub mod simulation {
         
         // 0.1 * 5/10 * (1-((1-1) / 100)) = 0.05
         // 0.1 * 1/10 * (1-(8-1) / 100)) = 
-        if weapon.name == String::from("dagger") {
-            print!("{:?} ", 0.2 - foritification_modifier);
+        // if weapon.name == String::from("dagger") {
+        //     print!("{:?} ", 0.2 - foritification_modifier);
+        // }
+        let mut hit_chance = BASE_HIT_RATE - foritification_modifier;
+        if !has_supply {
+            hit_chance *= OUT_OF_SUPPLY_ENGAGEMENT_CHANCE;
         }
-        
 
-        return i < 0.2 - foritification_modifier && target_attackable(weapon, &target.unit_type.clone());
+        return i < BASE_HIT_RATE - foritification_modifier && target_attackable(weapon, &target.unit_type.clone());
     }
 
     pub fn pen_check(weapon: &Weapon, target: &Unit) -> bool {
@@ -74,6 +81,7 @@ pub mod simulation {
     pub fn calculate_losses(attacker: Force, target: Force) -> (Force, Vec<CombatLog>) {
         let mut working_target = target.clone();
         let mut combat_log: Vec<CombatLog> = vec![];
+        let has_supply = calc_supply_capacity(&(attacker.clone())) > attacker.supply_used;
         for element in attacker.forces {
             for _i in 1..(element.count + 1) {
                 for weapon in &element.unit_type.weapons {
@@ -81,7 +89,7 @@ pub mod simulation {
                         let target_option = random_target(&mut working_target);
                         if target_option.is_some() {
                             let target_element = target_option.unwrap();
-                            let hit = hit_check(weapon, &target_element);
+                            let hit = hit_check(weapon, &target_element, has_supply);
                             let penned = hit && pen_check(weapon, &target_element.unit_type);
                             let killed = penned && kill_check(weapon, &target_element.unit_type);
                             let mut verb = MISSED;

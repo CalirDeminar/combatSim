@@ -7,6 +7,7 @@ pub mod Weapons {
         pub damage: i32,
         pub rof: i32,
         pub range: i32,
+        pub supply_usage: i32,
     }
 
     // pen/kill chances = (pen||dmg)/(armour/hp * 2);
@@ -57,7 +58,8 @@ pub mod Weapons {
             pen: 1,
             damage: 2,
             rof: 1,
-            range: 1
+            range: 1,
+            supply_usage: 1
         };
     }
 
@@ -67,7 +69,8 @@ pub mod Weapons {
             pen: 2,
             damage: 1,
             rof: 1,
-            range: 1
+            range: 1,
+            supply_usage: 1
         };
     }
 
@@ -77,7 +80,8 @@ pub mod Weapons {
             pen: 1,
             damage: 1,
             rof: 1,
-            range: 1
+            range: 1,
+            supply_usage: 1
         }
     }
 
@@ -87,7 +91,8 @@ pub mod Weapons {
             pen: 2,
             damage: 2,
             rof: 1,
-            range: 1
+            range: 1,
+            supply_usage: 1
         }
     }
 
@@ -97,7 +102,8 @@ pub mod Weapons {
             pen: 4,
             damage: 2,
             rof: 1,
-            range: 1
+            range: 1,
+            supply_usage: 1
         }
     }
 
@@ -107,7 +113,8 @@ pub mod Weapons {
             pen: 2,
             damage: 2,
             rof: 2,
-            range: 2
+            range: 2,
+            supply_usage: 2
         }
     }
 
@@ -117,7 +124,8 @@ pub mod Weapons {
             pen: 3,
             damage: 2,
             rof: 1,
-            range: 3
+            range: 3,
+            supply_usage: 2
         }
     }
 
@@ -130,6 +138,7 @@ pub mod Weapons {
             damage: PROFILE_556.damage,
             range: PROFILE_556.range,
             rof: HUMAN_SEMI_AUTO_ROF,
+            supply_usage: 2
         }
     }
 
@@ -140,6 +149,7 @@ pub mod Weapons {
             damage: PROFILE_556.damage,
             range: PROFILE_556.range,
             rof: HUMAN_FULL_AUTO_ROF,
+            supply_usage: 12
         }
     }
 
@@ -149,7 +159,8 @@ pub mod Weapons {
             pen: PROFILE_762.pen,
             damage: PROFILE_762.damage,
             range: PROFILE_762.range,
-            rof: HUMAN_FULL_AUTO_ROF
+            rof: HUMAN_FULL_AUTO_ROF,
+            supply_usage: 15
         }
     }
 
@@ -159,7 +170,8 @@ pub mod Weapons {
             pen: PROFILE_50_C.pen,
             damage: PROFILE_50_C.damage,
             range: PROFILE_50_C.range,
-            rof: HUMAN_SEMI_AUTO_ROF
+            rof: HUMAN_SEMI_AUTO_ROF,
+            supply_usage: 18
         }
     }
 
@@ -169,7 +181,8 @@ pub mod Weapons {
             pen: PROFILE_LAT.pen,
             damage: PROFILE_LAT.damage,
             range: PROFILE_LAT.range,
-            rof: HUMAN_SINGLE_SHOT_ROF
+            rof: HUMAN_SINGLE_SHOT_ROF,
+            supply_usage: 12
         }
     }
 }
