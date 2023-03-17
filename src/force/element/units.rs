@@ -1,5 +1,5 @@
 pub mod weapons;
-use weapons::{*};
+use weapons::Weapons::{*};
 
 #[derive(Debug, Clone)]
 pub struct Unit {
@@ -77,5 +77,57 @@ pub fn longbowman() -> Unit {
         armour: 1,
         size: 2,
         weapons: vec![long_bow()]
+    }
+}
+
+// modern day
+
+pub fn rifleman() -> Unit {
+    return Unit {
+        name: String::from("Rifleman"),
+        hp: 2,
+        armour: 5,
+        size: 2,
+        weapons: vec![rifle()]
+    }
+}
+
+pub fn auto_rifleman() -> Unit {
+    return Unit {
+        name: String::from("Auto Rifleman"),
+        hp: 2,
+        armour: 5,
+        size: 2,
+        weapons: vec![automatic_rifle()]
+    }
+}
+
+pub fn machine_gunner() -> Unit {
+    return Unit {
+        name: String::from("Machine Gunner"),
+        hp: 2,
+        armour: 5,
+        size: 2,
+        weapons: vec![machine_gun()]
+    }
+}
+
+pub fn light_at_infantry() -> Unit {
+    return Unit {
+        name: String::from("ATGM Team"),
+        hp: 2,
+        armour: 5,
+        size: 2,
+        weapons: vec![light_atgm()]
+    }
+}
+
+pub fn infantry_fighting_vehicle() -> Unit {
+    return Unit {
+        name: String::from("IFV"),
+        hp: 20,
+        armour: 30,
+        size: 8,
+        weapons: vec![heavy_machine_gun()]
     }
 }

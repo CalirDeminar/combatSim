@@ -13,50 +13,12 @@ pub struct Force {
 pub mod force_combat {
     mod logger;
     mod simulation;
-    use crate::Force;
+    use crate::{Force, Unit, Element};
     use logger::{*};
     use simulation::simulation::{*};
 
-    pub fn calculate_losses(attacker: Force, target: Force) -> (Force, Vec<CombatLog>) {
-        let mut working_target = target.clone();
-        let mut combat_log: Vec<CombatLog> = vec![];
-        for element in attacker.forces {
-            for _i in 1..(element.count + 1) {
-                for weapon in &element.unit_type.weapons {
-                    for _j in 1..(weapon.rof + 1) {
-                        let target_option = random_target(&mut working_target);
-                        if target_option.is_some() {
-                            let target_element = target_option.unwrap();
-                            let hit = hit_check(weapon, &target_element.unit_type);
-                            let penned = hit && pen_check(weapon, &target_element.unit_type);
-                            let killed = penned && kill_check(weapon, &target_element.unit_type);
-                            let mut verb = MISSED;
-                            if hit {
-                                verb = HIT;
-                            }
-                            if penned {
-                                verb = PENNED;
-                            }
-                            if killed {
-                                verb = KILLED;
-                                target_element.count -= 1;
-                            }
-                            combat_log.push(
-                                CombatLog {
-                                    attacker_force_name: attacker.name.clone(),
-                                    attacker_unit_name: element.unit_type.name.clone(),
-                                    weapon_name: weapon.name.clone(),
-                                    target_force_name: target.name.clone(),
-                                    target_unit_name: target_element.unit_type.name.clone(),
-                                    verb: String::from(verb),
-                                }
-                            );
-                        }
-                    }
-                }
-            }
-        }
-        return (working_target, combat_log);
+    pub fn element_builder(unit_type: Unit, count: i32, fort: i32) -> Element {
+        return Element {unit_type: unit_type, count: count, fortification: fort};
     }
 
     pub fn run_round(force_a: Force, force_b: Force) -> (Force, Force, Vec<CombatLog>) {

@@ -1,9 +1,10 @@
 pub mod simulation {
     use crate::units;
     use crate::force;
+    use crate::force::force_combat::CombatLog;
     use force::{Force, Element};
     use units::{Unit, weapons};
-    use weapons::Weapon;
+    use weapons::Weapons::*;
     use rand::Rng;
 
 
@@ -12,11 +13,22 @@ pub mod simulation {
     pub const PENNED: &str = "penned";
     pub const KILLED: &str = "killed";
 
-    pub fn hit_check(weapon: &Weapon, target: &Unit) -> bool {
+    pub fn hit_check(weapon: &Weapon, target: &Element) -> bool {
         let mut rng = rand::thread_rng();
-    
         let i: f32 = rng.gen();
-        return i < 0.2 && target_attackable(weapon, target);
+        let foritification_modifier = 
+            0.1 
+            * (target.fortification.clone() as f32 / 10.0) 
+            * (1.0 - ((target.unit_type.size as f32 - 1.0) / 100.0));
+        
+        // 0.1 * 5/10 * (1-((1-1) / 100)) = 0.05
+        // 0.1 * 1/10 * (1-(8-1) / 100)) = 
+        if weapon.name == String::from("dagger") {
+            print!("{:?} ", 0.2 - foritification_modifier);
+        }
+        
+
+        return i < 0.2 - foritification_modifier && target_attackable(weapon, &target.unit_type.clone());
     }
 
     pub fn pen_check(weapon: &Weapon, target: &Unit) -> bool {
@@ -29,7 +41,7 @@ pub mod simulation {
     pub fn kill_check(weapon: &Weapon, target: &Unit) -> bool {
         let mut rng = rand::thread_rng();
         let i: f32 = rng.gen();
-        let pen_chance = weapon.pen as f32/(target.hp * 2) as f32;
+        let pen_chance = weapon.damage as f32/(target.hp * 2) as f32;
         return i < pen_chance.clamp(0.0, 1.0);
     }
 
@@ -57,5 +69,47 @@ pub mod simulation {
         let attackable_odds = weapon.range as f32 / max_target_range as f32;
         let i: f32 = rand::thread_rng().gen();
         return i < attackable_odds;
+    }
+
+    pub fn calculate_losses(attacker: Force, target: Force) -> (Force, Vec<CombatLog>) {
+        let mut working_target = target.clone();
+        let mut combat_log: Vec<CombatLog> = vec![];
+        for element in attacker.forces {
+            for _i in 1..(element.count + 1) {
+                for weapon in &element.unit_type.weapons {
+                    for _j in 1..(weapon.rof + 1) {
+                        let target_option = random_target(&mut working_target);
+                        if target_option.is_some() {
+                            let target_element = target_option.unwrap();
+                            let hit = hit_check(weapon, &target_element);
+                            let penned = hit && pen_check(weapon, &target_element.unit_type);
+                            let killed = penned && kill_check(weapon, &target_element.unit_type);
+                            let mut verb = MISSED;
+                            if hit {
+                                verb = HIT;
+                            }
+                            if penned {
+                                verb = PENNED;
+                            }
+                            if killed {
+                                verb = KILLED;
+                                target_element.count -= 1;
+                            }
+                            combat_log.push(
+                                CombatLog {
+                                    attacker_force_name: attacker.name.clone(),
+                                    attacker_unit_name: element.unit_type.name.clone(),
+                                    weapon_name: weapon.name.clone(),
+                                    target_force_name: target.name.clone(),
+                                    target_unit_name: target_element.unit_type.name.clone(),
+                                    verb: String::from(verb),
+                                }
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        return (working_target, combat_log);
     }
 }

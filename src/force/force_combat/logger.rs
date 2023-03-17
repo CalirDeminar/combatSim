@@ -25,11 +25,12 @@ fn generate_log(log: &CombatLog) -> String {
 }
 
 fn print_log_for_verb(map: &HashMap<CombatLog, i32>, verb: String) {
-        for (log, count) in map {
+    for (log, count) in map {
         if log.verb == verb {
-        println!("{:?}x {}", count, generate_log(log));
+            println!("{:?}x {}", count, generate_log(log));
         }
     }
+    println!("--------------------");
 }
 
 fn group_and_print_logs(logs: Vec<CombatLog>) {
