@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use crate::Force;
+use crate::force::force_combat::*;
 
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct CombatLog {
@@ -41,10 +42,10 @@ fn group_and_print_logs(logs: Vec<CombatLog>) {
             freq.insert(log, current_count.unwrap() + 1);
         }
     }
-    print_log_for_verb(&freq, String::from("missed"));
-    print_log_for_verb(&freq, String::from("hit"));
-    print_log_for_verb(&freq, String::from("penned"));
-    print_log_for_verb(&freq, String::from("killed"));
+    // print_log_for_verb(&freq, String::from(MISSED));
+    print_log_for_verb(&freq, String::from(HIT));
+    print_log_for_verb(&freq, String::from(PENNED));
+    print_log_for_verb(&freq, String::from(KILLED));
 }
 
 pub fn print_combat_log(logs: &Vec<CombatLog>, force_name: String) {

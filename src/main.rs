@@ -2,21 +2,30 @@ mod force;
 use force::{element::{units, Element}, Force, force_combat::*};
 use units::{*};
 
+
+
 fn main() {
-    let force_a = Force {
-        name: String::from("Force A"),
-        forces: vec![
-            Element {unit_type: swordsman(), count: 50},
-            Element {unit_type: spearman(), count: 50},
-            Element {unit_type: goblin(), count: 100}
-            ]
+    let goblin_force = Force {
+            name: String::from("Goblin Force"),
+            forces: vec![
+                Element {unit_type: swordsman(), count: 500},
+                Element {unit_type: spearman(), count: 500},
+                Element {unit_type: goblin(), count: 1000}
+                ]
     };
-    let force_b = Force {
-        name: String::from("Force B"),
+    let knight_cav_force = Force {
+        name: String::from("Knight Cav Force"),
         forces: vec![
-            Element {unit_type: knight(), count: 50}, 
-            Element {unit_type: cavalry(), count: 25}
+            Element {unit_type: knight(), count: 500}, 
+            Element {unit_type: cavalry(), count: 250}
         ]
     };
-    run_combat(force_a, force_b);
+    let archer_force = Force {
+        name: String::from("Archer Force"),
+        forces: vec![
+            Element {unit_type: shortbowman(), count: 500}, 
+            Element {unit_type: longbowman(), count: 250}
+        ]
+    };
+    run_combat(goblin_force, archer_force);
 }

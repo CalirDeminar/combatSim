@@ -59,3 +59,23 @@ pub fn cavalry() -> Unit {
         weapons: vec![horse_impact(), cavalry_lance()]
     }
 }
+
+pub fn shortbowman() -> Unit {
+    return Unit {
+        name: String::from("Shortbowman"),
+        hp: 2,
+        armour: 1,
+        size: 2,
+        weapons: vec![short_bow()]
+    }
+}
+
+pub fn longbowman() -> Unit {
+    return Unit {
+        name: String::from("Longbowman"),
+        hp: 2,
+        armour: 1,
+        size: 2,
+        weapons: vec![long_bow()]
+    }
+}

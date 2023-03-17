@@ -12,49 +12,10 @@ pub struct Force {
 
 pub mod force_combat {
     mod logger;
-    use crate::units;
+    mod simulation;
     use crate::Force;
-    use crate::Element;
     use logger::{*};
-    use units::{Unit, weapons};
-    use weapons::Weapon;
-    use rand::Rng;
-    
-
-    fn hit_check(_weapon: &Weapon, _target: &Unit) -> bool {
-        let mut rng = rand::thread_rng();
-    
-        let i: f32 = rng.gen();
-        return i < 0.5;
-    }
-
-    fn pen_check(weapon: &Weapon, target: &Unit) -> bool {
-        let mut rng = rand::thread_rng();
-        let i: f32 = rng.gen();
-        let pen_chance = weapon.pen as f32/(target.armour * 2) as f32;
-        return i < pen_chance.clamp(0.0, 1.0);
-    }
-    
-    fn kill_check(weapon: &Weapon, target: &Unit) -> bool {
-        let mut rng = rand::thread_rng();
-        let i: f32 = rng.gen();
-        let pen_chance = weapon.pen as f32/(target.hp * 2) as f32;
-        return i < pen_chance.clamp(0.0, 1.0);
-    }
-
-    fn random_target(force: &mut Force) -> Option<&mut Element>  {
-        let elements = &mut force.forces;
-        let total_forces = elements.into_iter().fold(0, |acc, e| acc + (e.count * e.unit_type.size));
-        let odds = elements.into_iter().map(|e| ((e.count * e.unit_type.size) as f32 / total_forces as f32, e));
-        let mut i: f32 = rand::thread_rng().gen();
-        for entry in odds {
-            if i < entry.0 {
-                return Some(entry.1);
-            }
-            i -= entry.0;
-        }
-        return None;
-    }
+    use simulation::simulation::{*};
 
     pub fn calculate_losses(attacker: Force, target: Force) -> (Force, Vec<CombatLog>) {
         let mut working_target = target.clone();
@@ -69,15 +30,15 @@ pub mod force_combat {
                             let hit = hit_check(weapon, &target_element.unit_type);
                             let penned = hit && pen_check(weapon, &target_element.unit_type);
                             let killed = penned && kill_check(weapon, &target_element.unit_type);
-                            let mut verb = String::from("missed");
+                            let mut verb = MISSED;
                             if hit {
-                                verb = String::from("hit");
+                                verb = HIT;
                             }
                             if penned {
-                                verb = String::from("penned");
+                                verb = PENNED;
                             }
                             if killed {
-                                verb = String::from("killed");
+                                verb = KILLED;
                                 target_element.count -= 1;
                             }
                             combat_log.push(
@@ -87,7 +48,7 @@ pub mod force_combat {
                                     weapon_name: weapon.name.clone(),
                                     target_force_name: target.name.clone(),
                                     target_unit_name: target_element.unit_type.name.clone(),
-                                    verb: verb,
+                                    verb: String::from(verb),
                                 }
                             );
                         }
