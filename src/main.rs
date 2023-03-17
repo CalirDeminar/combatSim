@@ -23,7 +23,7 @@ fn main() {
     let archer_force = Force {
         name: String::from("Archer Force"),
         forces: vec![
-            Element {unit_type: shortbowman(), count: 500}, 
+            Element {unit_type: shortbowman(), count: 400}, 
             Element {unit_type: longbowman(), count: 250}
         ]
     };

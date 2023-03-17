@@ -71,7 +71,7 @@ pub mod force_combat {
     pub fn run_combat(force_a: Force, force_b: Force) {
         let mut f_a = force_a.clone();
         let mut f_b = force_b.clone();
-        let mut round_count = 0;
+        let mut round_count = 1;
         loop {
             println!("\nRound: {:?}", round_count);
             print_combatants(&f_a);
