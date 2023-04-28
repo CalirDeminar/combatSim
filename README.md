@@ -1,2 +1,2 @@
 # combatSim
-abstract combatSim written in rust
+Abstract narrative combat simulation written in rust
